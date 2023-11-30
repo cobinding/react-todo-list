@@ -1,21 +1,7 @@
+import { map } from 'jquery';
 import React, { ReactNode, useState } from 'react';
 import TodoItem from './TodoItem';
 
-
-{/* 
-    <input /> 태그를 활용해 사용자로 부터 입력받은 리스트를 itemList에 담을것.
-    setState를 활용하고, itemList에 담기는 객체는 Type을 참조할 것.
-
-    itemList.map()을 사용하여 투두리스 렌더링
-    TodoItem 컴포넌트를 렌더링할 것.
-
-      조건
-      1. TodoItem 컴포넌트에 삭제 버튼을 클릭 하면 해당 아이템이 지워진다.
-      filter 또는 slice를 이용할 것.
-      2. TodoItem 컴포넌트 왼쪽에 체크 표시를 누르면 완료된 취소선 표시를 한다.
-      완료된컴포넌트는 <del></del>을 활용하여 조건부 렌더링을 활용할 것.
-  */
-}
 
 const initialList = [
   { id: 1, content: "운동하기" },
@@ -23,25 +9,46 @@ const initialList = [
   { id: 3, content: "책읽기" }
 ]
 
+let nextId = 4;
+
 export default function TodoList({ children }: { children: ReactNode }) {
   const [itemList, setItemList] = useState<{
     id: number;
     content: string;
   }[]>(initialList);
 
+  const [text, setText] = useState('');
 
-  const renderPlan = initialList.map((init) => {
-    return (
-      <TodoItem 
-        id={init.id}
-        content={init.content}
-      />
+  const handleDelete = (id:number) => {
+    setItemList(
+      itemList.filter( item =>
+        item.id !== id
+      )
     );
-  })
+  }
 
+  // 입력된 데이터를 배열에 추가해서 렌더링
   return (
     <>
-      {renderPlan}
+      <input type="text"
+        value={text}
+        onChange={e => setText(e.target.value)}
+      />
+      <button onClick={() =>
+        setItemList([
+          ...itemList,
+          {id: nextId++, content:text}
+        ])
+      }>ADD</button>
+      <ul>
+        {itemList.map(item => (
+          <TodoItem
+            id={item.id}
+            content={item.content}
+            onDelete={handleDelete}
+          />
+        ))}
+      </ul>
     </>
-  )
+  );
 } 
