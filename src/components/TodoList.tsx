@@ -2,8 +2,12 @@ import { map } from 'jquery';
 import React, { ReactNode, useState } from 'react';
 import TodoItem from './TodoItem';
 
+export interface Todo {
+  id: number;
+  content: string;
+}
 
-const initialList = [
+const initialList: Todo[] = [
   { id: 1, content: "운동하기" },
   { id: 2, content: "살빼기" },
   { id: 3, content: "책읽기" }
@@ -12,17 +16,14 @@ const initialList = [
 let nextId = 4;
 
 export default function TodoList({ children }: { children: ReactNode }) {
-  const [itemList, setItemList] = useState<{
-    id: number;
-    content: string;
-  }[]>(initialList);
+  const [itemList, setItemList] = useState<Todo[]>(initialList);
 
   const [text, setText] = useState('');
 
-  const handleDelete = (id:number) => {
+  const handleDelete = (todo: Todo) => {
     setItemList(
       itemList.filter( item =>
-        item.id !== id
+        item.id !== todo.id
       )
     );
   }
@@ -43,8 +44,7 @@ export default function TodoList({ children }: { children: ReactNode }) {
       <ul>
         {itemList.map(item => (
           <TodoItem
-            id={item.id}
-            content={item.content}
+            todo={item}
             onDelete={handleDelete}
           />
         ))}

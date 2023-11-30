@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import TodoList from './TodoList';
+import TodoList, { Todo } from './TodoList';
 
 
-export default function TodoItem({ id, content, onDelete }: { id: number, content: string, onDelete: (id: number) => void }) {
+export default function TodoItem({ todo, onDelete }: { todo: Todo, onDelete: (todo: Todo) => void }) {
 
     return (
         <>
-            <li key={id}>
-                {content}{' '}
+            <li key={todo.id}>
+                {todo.content}{' '}
                 <button onClick={() => {
-                    onDelete(id);
+                    onDelete(todo);
                 }}> DELETE</button>
             
             </li>
