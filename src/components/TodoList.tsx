@@ -5,13 +5,14 @@ import TodoItem from './TodoItem';
 export interface Todo {
   id: number;
   content: string;
+  seen: boolean;
 }
 
 const initialList: Todo[] = [
-  { id: 1, content: "운동하기" },
-  { id: 2, content: "살빼기" },
-  { id: 3, content: "책읽기" }
-]
+  { id: 1, content: "운동하기", seen: false},
+  { id: 2, content: "살빼기", seen: false},
+  { id: 3, content: "책읽기", seen: false},
+];
 
 let nextId = 4;
 
@@ -28,6 +29,16 @@ export default function TodoList({ children }: { children: ReactNode }) {
     );
   }
 
+  const handleToggleCheck = (todo: Todo) => {
+    setItemList(itemList.map(item => {
+      if(item.id == todo.id) {
+        return {...item, seen: todo.seen = !todo.seen };
+      } else {
+        return item;
+      }
+    }));
+  }
+
   // 입력된 데이터를 배열에 추가해서 렌더링
   return (
     <>
@@ -38,7 +49,7 @@ export default function TodoList({ children }: { children: ReactNode }) {
       <button onClick={() =>
         setItemList([
           ...itemList,
-          {id: nextId++, content:text}
+          {id: nextId++, content:text, seen:false}
         ])
       }>ADD</button>
       <ul>
@@ -46,9 +57,11 @@ export default function TodoList({ children }: { children: ReactNode }) {
           <TodoItem
             todo={item}
             onDelete={handleDelete}
+            onToggle={handleToggleCheck}
           />
         ))}
       </ul>
+    
     </>
   );
 } 
